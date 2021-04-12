@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+    database:
+        image: postgres:13-alpine
+        container_name: db_sf_arduino
+        environment:
+            POSTGRES_USER: main
+            POSTGRES_PASSWORD: main
+            POSTGRES_DB: sf_arduino
+        ports: [5432]
