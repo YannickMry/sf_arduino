@@ -1,4 +1,6 @@
 {
+    "name": "sf_arduino/arduino",
+    "description": "sf_arduino/arduino",
     "type": "project",
     "license": "proprietary",
     "minimum-stability": "dev",
