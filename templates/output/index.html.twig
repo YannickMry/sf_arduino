@@ -62,14 +62,20 @@
                                 outputBadge.classList.remove("bg-success")
                                 outputBadge.classList.add("bg-danger")
                                 outputBadge.innerHTML = "Off"
-                                outputSwitch.checked = false
+                                //outputSwitch.checked = false
                             } else {
                                 outputBadge.classList.remove("bg-danger")
                                 outputBadge.classList.add("bg-success")
                                 outputBadge.innerHTML = "On"
-                                outputSwitch.checked = true
+                                //outputSwitch.checked = true
                             }
                         })
+                } else {
+                    if(!e.target.checked){
+                        e.target.checked=true;
+                    } else {
+                        e.target.checked=false;
+                    }
                 }
             })
         });
