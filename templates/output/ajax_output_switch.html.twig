@@ -1,0 +1,12 @@
+<td>
+    {% if output.state %}
+    <span class="badge rounded-pill bg-success">On</span>
+    {% else %}
+    <span class="badge rounded-pill bg-danger">Off</span>
+    {% endif %}
+</td>
+<td>
+    <div class="switch">
+        <input class="checkbox ajax-output-switch" type="checkbox" {{ output.state ? 'checked="checked"' : '' }} id="switch-output-{{output.id}}" data-id="{{output.id}}">
+    </div>
+</td>

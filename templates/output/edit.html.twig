@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Output{% endblock %}
+
+{% block body %}
+    <h1>Edit Output</h1>
+
+    {{ include('output/_form.html.twig', {'button_label': 'Enregistrer'}) }}
+
+    <a href="{{ path('output_index') }}">back to list</a>
+{% endblock %}
