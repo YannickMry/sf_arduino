@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Salles{% endblock %}
+
+{% block body %}
+    <h1>Salles</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nom</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for room in rooms %}
+            <tr>
+                <th>#{{ room.id }}</th>
+                <td>{{ room.name }}</td>
+                <td>
+                    <div class="d-flex v-stack gap-2">
+                        <a href="{{ path('app_room_edit', {'id': room.id}) }}" class="btn btn-warning">
+                            <i class="far fa-edit"></i>
+                        </a>
+                        <form method="post" action="{{ path('app_room_delete', {'id': room.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette salle ?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ room.id) }}">
+                            <button class="btn btn-danger">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">Aucune salle n'a été créée</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a class="btn btn-primary mt-2" href="{{ path('app_room_new') }}">Ajouter</a>
+{% endblock %}

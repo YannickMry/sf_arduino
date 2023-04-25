@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\OutputRepository;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -11,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Output
 {
     /**
+     * @Groups({"api_output"})
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
@@ -18,19 +20,27 @@ class Output
     private $id;
 
     /**
+     * @Groups({"api_output"})
      * @ORM\Column(type="string", length=255)
      */
     private $name;
 
     /**
+     * @Groups({"api_output"})
      * @ORM\Column(type="integer")
      */
     private $gpio;
 
     /**
+     * @Groups({"api_output"})
      * @ORM\Column(type="boolean", nullable=true)
      */
     private $state;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=RaspberryPi::class, inversedBy="outputs")
+     */
+    private $raspberryPi;
 
     public function getId(): ?int
     {
@@ -71,5 +81,22 @@ class Output
         $this->state = $state;
 
         return $this;
+    }
+
+    public function getRaspberryPi(): ?RaspberryPi
+    {
+        return $this->raspberryPi;
+    }
+
+    public function setRaspberryPi(?RaspberryPi $raspberryPi): self
+    {
+        $this->raspberryPi = $raspberryPi;
+
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->name;
     }
 }

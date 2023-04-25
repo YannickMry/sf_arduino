@@ -1,0 +1,5 @@
+{% for room in rooms %}
+<li class="nav-item">
+    <a class="nav-link" aria-current="page" href="{{path('app_room_show', {id: room.id})}}">{{ room.name }}</a>
+</li>
+{% endfor %}

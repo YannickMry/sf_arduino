@@ -8,78 +8,36 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Gpio</th>
-                <th>Name</th>
-                <th>State</th>
-                <th></th>
+                <th>ID</th>
+                <th>Nom</th>
+                <th>GPIO</th>
+                <th>Lié au raspberry</th>
                 <th>actions</th>
             </tr>
         </thead>
         <tbody>
         {% for output in outputs %}
-            <tr id="output-{{output.id}}">
-                <td>{{ output.gpio }}</td>
+            <tr>
+                <th># {{ output.id }}</th>
                 <td>{{ output.name }}</td>
-                {% include "output/ajax_output_switch.html.twig" %}
+                <td>{{ output.gpio }}</td>
+                <td>{{ output.raspberryPi }}</td>
                 <td>
-                    <a href="{{ path('output_edit', {'id': output.id}) }}" class="btn btn-warning"><i class="far fa-edit"></i></a>
-                    <a href="{{ path('output_delete', {'id': output.id}) }}" class="btn btn-danger" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette sortie ?');"><i class="fas fa-trash"></i></a>
+                    <a href="{{ path('app_output_edit', {'id': output.id}) }}" class="btn btn-warning">
+                        <i class="far fa-edit"></i>
+                    </a>
+                    <a href="{{ path('app_output_delete', {'id': output.id}) }}" class="btn btn-danger" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette sortie ?');">
+                        <i class="fas fa-trash"></i>
+                    </a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="5">no records found</td>
+                <td colspan="5">Aucun GPIO n'a été créé</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('output_new') }}" class="btn btn-primary">Ajouter</a>
-{% endblock %}
-
-{% block javascripts %}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous"></script>
-<script>
-    $(document).ready(function(){
-        console.log("document loaded")
-        const inputs = document.querySelectorAll(".ajax-output-switch")
-
-        inputs.forEach(function(item){
-            item.addEventListener("change", function(e){
-                const itemId = item.dataset.id;
-                const url = "{{ url('ajax_output')|escape('js') }}/" + itemId;
-                
-                if(confirm("Voulez vous vraiment effectuer cette action ?")){
-                    $.ajax({
-                        url: url,
-                        method: 'GET',
-                        dataType: 'json',
-                    })
-                        .done( function(xhr){
-                            const outputBadge = document.querySelector("#output-" + xhr.id + " .badge")
-                            const outputSwitch = document.querySelector("#output-" + xhr.id + " .ajax-output-switch")
-                            if(!xhr.state){
-                                outputBadge.classList.remove("bg-success")
-                                outputBadge.classList.add("bg-danger")
-                                outputBadge.innerHTML = "Off"
-                                //outputSwitch.checked = false
-                            } else {
-                                outputBadge.classList.remove("bg-danger")
-                                outputBadge.classList.add("bg-success")
-                                outputBadge.innerHTML = "On"
-                                //outputSwitch.checked = true
-                            }
-                        })
-                } else {
-                    if(!e.target.checked){
-                        e.target.checked=true;
-                    } else {
-                        e.target.checked=false;
-                    }
-                }
-            })
-        });
-    })
-</script>
-    
+    <a href="{{ path('app_output_new') }}" class="btn btn-primary">Ajouter</a>
 {% endblock %}

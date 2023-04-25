@@ -13,22 +13,12 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
- * @Route("/output")
+ * @Route("/output", name="app_output_")
  */
 class OutputController extends AbstractController
 {
     /**
-     * @Route("/json", name="output_json", methods={"GET"})
-     */
-    public function jsonify(OutputRepository $outputRepository): JsonResponse
-    {
-        return $this->json(
-            $outputRepository->findAll()
-        );
-    }
-
-    /**
-     * @Route("/", name="output_index", methods={"GET"})
+     * @Route("/", name="index", methods={"GET"})
      */
     public function index(OutputRepository $outputRepository): Response
     {
@@ -38,7 +28,7 @@ class OutputController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="output_new", methods={"GET","POST"})
+     * @Route("/new", name="new", methods={"GET","POST"})
      */
     public function new(Request $request): Response
     {
@@ -51,7 +41,7 @@ class OutputController extends AbstractController
             $entityManager->persist($output);
             $entityManager->flush();
 
-            return $this->redirectToRoute('output_index');
+            return $this->redirectToRoute('app_output_index');
         }
 
         return $this->render('output/new.html.twig', [
@@ -61,38 +51,25 @@ class OutputController extends AbstractController
     }
 
     /**
-     * @Route("/ajax/{id}", name="ajax_output", defaults={"id": 1})
+     * @Route("/ajax/{id}", name="switch_ajax", defaults={"id": 1})
      */
     public function ajaxOutputSwitch(Output $output, EntityManagerInterface $manager): JsonResponse
     {
-        if($output->getState()){
+        $output->setState(!$output->getState());
 
-            $output->setState(false);
+        $manager->persist($output);
+        $manager->flush();
 
-            $manager->persist($output);
-            $manager->flush();
-
-            return $this->json(
-                $output,
-                200
-            );
-
-        } else {
-
-            $output->setState(true);
-
-            $manager->persist($output);
-            $manager->flush();
-
-            return $this->json(
-                $output,
-                200
-            );
-        }
+        return $this->json(
+            $output,
+            200,
+            [],
+            ['groups' => 'api_output']
+        );
     }
 
     /**
-     * @Route("/{id}/edit", name="output_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Output $output): Response
     {
@@ -102,7 +79,7 @@ class OutputController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('output_index');
+            return $this->redirectToRoute('app_output_index');
         }
 
         return $this->render('output/edit.html.twig', [
@@ -112,7 +89,7 @@ class OutputController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="output_delete", methods={"GET"})
+     * @Route("/{id}", name="delete", methods={"GET"})
      */
     public function delete(Request $request, Output $output): Response
     {
@@ -120,6 +97,6 @@ class OutputController extends AbstractController
             $entityManager->remove($output);
             $entityManager->flush();
 
-        return $this->redirectToRoute('output_index');
+        return $this->redirectToRoute('app_output_index');
     }
 }

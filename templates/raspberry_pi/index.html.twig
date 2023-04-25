@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}RaspberryPi index{% endblock %}
+
+{% block body %}
+    <h1>RaspberryPi index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nom</th>
+                <th>Lié à la salle</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for raspberry_pi in raspberry_pis %}
+            <tr>
+                <th>#{{ raspberry_pi.id }}</th>
+                <td>{{ raspberry_pi.name }}</td>
+                <td>{{ raspberry_pi.room }}</td>
+                <td>
+                    <div class="d-flex v-stack gap-2">
+                        <a href="{{ path('app_raspberry_edit', {'id': raspberry_pi.id}) }}" class="btn btn-warning">
+                            <i class="far fa-edit"></i>
+                        </a>
+                        <form method="post" action="{{ path('app_raspberry_delete', {'id': raspberry_pi.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce raspberry ?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ raspberry_pi.id) }}">
+                            <button class="btn btn-danger">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">Aucun raspberry n'a été créé</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a class="btn btn-primary mt-2" href="{{ path('app_raspberry_new') }}">Ajouter</a>
+{% endblock %}

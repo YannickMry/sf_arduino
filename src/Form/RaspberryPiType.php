@@ -3,28 +3,28 @@
 namespace App\Form;
 
 use App\Entity\Output;
+use App\Entity\RaspberryPi;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class OutputType extends AbstractType
+class RaspberryPiType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('name', null, ['label' => 'Nom'])
-            ->add('gpio')
-            ->add('raspberryPi', null, [
-                'label' => 'Lié au raspberry',
+            ->add('room', null, [
+                'label' => 'Lié à la salle',
                 'required' => false
             ])
         ;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Output::class,
+            'data_class' => RaspberryPi::class,
         ]);
     }
 }
